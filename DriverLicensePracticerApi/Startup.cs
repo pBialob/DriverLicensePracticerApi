@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DriverLicensePracticerApi.Seeders;
+using DriverLicensePracticerApi.Entities;
 
 namespace DriverLicensePracticerApi
 {
@@ -32,11 +34,14 @@ namespace DriverLicensePracticerApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DriverLicensePracticerApi", Version = "v1" });
             });
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddScoped<QuestionSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QuestionSeeder seeder)
         {
+            seeder.Seed("questionsBase.xlsx");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
