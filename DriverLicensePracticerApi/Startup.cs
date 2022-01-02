@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DriverLicensePracticerApi.Seeders;
 using DriverLicensePracticerApi.Entities;
+using DriverLicensePracticerApi.Services;
 
 namespace DriverLicensePracticerApi
 {
@@ -36,6 +37,9 @@ namespace DriverLicensePracticerApi
             });
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<QuestionSeeder>();
+            services.AddScoped<IQuestionService, QuestionService>();
+            services.AddAutoMapper(this.GetType().Assembly);
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,8 +56,6 @@ namespace DriverLicensePracticerApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
