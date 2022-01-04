@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using DriverLicensePracticerApi.Seeders;
 using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Services;
+using DriverLicensePracticerApi.Services.TestGenerator;
 
 namespace DriverLicensePracticerApi
 {
@@ -43,6 +44,7 @@ namespace DriverLicensePracticerApi
             services.AddScoped<CategorySeeder>();
             services.AddScoped<CategoryService>();
             services.AddScoped<ApplicationMappingProfile>();
+            services.AddScoped<TestFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
