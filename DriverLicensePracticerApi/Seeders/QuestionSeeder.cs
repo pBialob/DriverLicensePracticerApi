@@ -58,7 +58,7 @@ namespace DriverLicensePracticerApi.Seeders
                             MediaPath = worksheet.Cells[row, 16].Value.ToString().Trim(),
                             QuestionLevel = worksheet.Cells[row, 17].Value.ToString().Trim(),
                             Points = worksheet.Cells[row, 18].Value.ToString().Trim(),
-                            Categories = worksheet.Cells[row, 19].Value.ToString().Trim(),
+                            CategoriesToSet = worksheet.Cells[row, 19].Value.ToString().Trim(),
                             QuestionOrigin = worksheet.Cells[row, 21].Value.ToString().Trim(),
                             QuestionReason = worksheet.Cells[row, 22].Value.ToString().Trim(),
                             SafetyExplanation = worksheet.Cells[row, 23].Value.ToString().Trim()

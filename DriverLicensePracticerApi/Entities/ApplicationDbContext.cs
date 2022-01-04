@@ -8,10 +8,28 @@ namespace DriverLicensePracticerApi.Entities
         private string _connectionString = "Server=.;Database=DriverLicensePracticerDb;Trusted_Connection=True;";
 
         public DbSet<Question> Questions { get; set; }
-         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<QuestionCategory> QuestionCategories { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<QuestionCategory>().HasKey(sc => new { sc.CategoryId, sc.QuestionId });
+
+            modelBuilder.Entity<QuestionCategory>()
+                .HasOne<Question>(sc => sc.Question)
+                .WithMany(s => s.QuestionCategories)
+                .HasForeignKey(sc => sc.QuestionId);
+
+
+            modelBuilder.Entity<QuestionCategory>()
+                .HasOne<Category>(sc => sc.Category)
+                .WithMany(s => s.QuestionCategories)
+                .HasForeignKey(sc => sc.CategoryId);
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connectionString);
         }
+        
     }
 
 }

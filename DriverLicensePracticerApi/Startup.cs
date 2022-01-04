@@ -40,12 +40,16 @@ namespace DriverLicensePracticerApi
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddHttpContextAccessor();
+            services.AddScoped<CategorySeeder>();
+            services.AddScoped<CategoryService>();
+            services.AddScoped<ApplicationMappingProfile>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QuestionSeeder seeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QuestionSeeder questionSeeder, CategorySeeder categorySeeder)
         {
-            seeder.Seed("questionsBase.xlsx");
+            questionSeeder.Seed("questionsBase.xlsx");
+            categorySeeder.Seed();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

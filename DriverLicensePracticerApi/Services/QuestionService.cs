@@ -3,6 +3,7 @@ using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace DriverLicensePracticerApi.Services
@@ -17,18 +18,25 @@ namespace DriverLicensePracticerApi.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public QuestionService(ApplicationDbContext context, IMapper mapper)
+        private readonly ApplicationMappingProfile _appMappingProfile;
+        public QuestionService(ApplicationDbContext context, IMapper mapper, ApplicationMappingProfile applicationMappingProfile)
         {
             _context = context;
             _mapper = mapper;
+            _appMappingProfile = applicationMappingProfile;
         }
         public QuestionDto GetRandomQuestion()
         {
             Random rnd = new Random();
             var questionBaseSize = _context.Questions.OrderByDescending(i => i.Id).FirstOrDefault().Id;
             var randomId = rnd.Next(1, questionBaseSize);
-            var question = _context.Questions.FirstOrDefault(i => i.Id == randomId);
+            var questionCategories = _context.QuestionCategories.Where(x => x.QuestionId == randomId).ToList();
+            var question = _context.Questions.FirstOrDefault(x=>x.Id == randomId);
+            var questionCategoriesDto = _mapper.Map<List<CategoryDto>>(questionCategories);
             var questionDto = _mapper.Map<QuestionDto>(question);
+            questionDto.Categories = questionCategoriesDto;
+            _appMappingProfile.MapCategoryName(questionDto);
+
 
             return questionDto;
         }
@@ -39,5 +47,6 @@ namespace DriverLicensePracticerApi.Services
             var result = _mapper.Map<List<QuestionDto>>(questions);
             return result;
         }
+
     }
 }

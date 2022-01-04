@@ -1,7 +1,13 @@
-﻿namespace DriverLicensePracticerApi.Entities
+﻿using System.Collections.Generic;
+
+namespace DriverLicensePracticerApi.Entities
 {
     public class Question
     {
+        public Question()
+        {
+            this.QuestionCategories = new List<QuestionCategory>();
+        }
         public int Id { get; set; }
         public string QuestionName { get; set; }
         public string QuestionNumber { get; set; }
@@ -13,9 +19,11 @@
         public string MediaPath { get; set; }
         public string QuestionLevel { get; set; }
         public string Points { get; set; }
-        public string Categories { get; set; }
+        public string CategoriesToSet { get; set; }
         public string QuestionOrigin { get; set; }
         public string QuestionReason { get; set; }
         public string SafetyExplanation { get; set; }
+
+        public virtual ICollection<QuestionCategory> QuestionCategories { get; set; }
     }
 }
