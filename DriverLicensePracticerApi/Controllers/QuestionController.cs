@@ -27,5 +27,12 @@ namespace DriverLicensePracticerApi.Controllers
             var question = _questionService.GetRandomQuestion();
             return Ok(question);
         }
+        [HttpGet("specified")]
+        public ActionResult<QuestionDto> GetSpecifiedQuestion([FromBody]RandomSpecifiedDto dto)
+        {
+            var question = _questionService.GetSpecifiedQuestion(dto.Points, dto.Level, dto.Category);
+
+            return Ok(question);
+        }
     }
 }
