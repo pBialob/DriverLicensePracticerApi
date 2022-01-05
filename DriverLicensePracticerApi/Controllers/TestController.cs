@@ -1,5 +1,6 @@
 ﻿ using DriverLicensePracticerApi.Models;
 using DriverLicensePracticerApi.Services.TestGenerator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
  using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
  { 
     [ApiController]
     [Route("api/test")]
+    [Authorize]
     public class TestController : ControllerBase
     {
         private readonly TestFactory _testFactory;

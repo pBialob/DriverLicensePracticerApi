@@ -1,13 +1,15 @@
 ﻿using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
 using DriverLicensePracticerApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace DriverLicensePracticerApi.Controllers
 {
     [Route("api/question")]
-    //[ApiController]
+    [ApiController]
+    [Authorize]
     public class QuestionController : ControllerBase
     {
         private readonly IQuestionService _questionService;

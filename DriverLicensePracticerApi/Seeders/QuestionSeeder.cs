@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DriverLicensePracticerApi.Seeders
 {
-    public class QuestionSeeder
+    public class QuestionSeeder 
     {
         private readonly ApplicationDbContext _dbContext;
         public QuestionSeeder(ApplicationDbContext dbContext)
@@ -30,7 +30,7 @@ namespace DriverLicensePracticerApi.Seeders
             }
         }
 
-        private  List<Question> GetQuestions(string path)
+        public List<Question> GetQuestions(string path)
         {
             var questions = new List<Question>();
 

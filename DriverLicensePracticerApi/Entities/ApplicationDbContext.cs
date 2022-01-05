@@ -10,6 +10,8 @@ namespace DriverLicensePracticerApi.Entities
         public DbSet<Question> Questions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<QuestionCategory>().HasKey(sc => new { sc.CategoryId, sc.QuestionId });
@@ -24,6 +26,14 @@ namespace DriverLicensePracticerApi.Entities
                 .HasOne<Category>(sc => sc.Category)
                 .WithMany(s => s.QuestionCategories)
                 .HasForeignKey(sc => sc.CategoryId);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .IsRequired();
+
+            modelBuilder.Entity<Role>()
+                .Property(r => r.Name)
+                .IsRequired();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

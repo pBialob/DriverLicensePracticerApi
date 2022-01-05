@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DriverLicensePracticerApi.Seeders
 {
-    public class CategorySeeder
+    public class CategorySeeder 
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly CategoryService _categoryService;
@@ -25,7 +25,7 @@ namespace DriverLicensePracticerApi.Seeders
                     _dbContext.SaveChanges();
                     var questions = _dbContext.Questions.ToList();
                     SetupCategories(questions);
-                }  
+                }
             }
         }
 
@@ -48,12 +48,12 @@ namespace DriverLicensePracticerApi.Seeders
             };
             return categories;
         }
-     public void SetupCategories(List<Question> questions)
+        public void SetupCategories(List<Question> questions)
         {
             foreach (var question in questions)
             {
                 _categoryService.setupCategories(question.CategoriesToSet, question.Id);
-            }         
+            }
         }
     }
 }
