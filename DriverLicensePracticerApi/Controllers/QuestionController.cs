@@ -1,4 +1,5 @@
-﻿using DriverLicensePracticerApi.Entities;
+﻿using AutoMapper;
+using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
 using DriverLicensePracticerApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -13,28 +14,38 @@ namespace DriverLicensePracticerApi.Controllers
     public class QuestionController : ControllerBase
     {
         private readonly IQuestionService _questionService;
-        public QuestionController(IQuestionService service)
+        private readonly IMapper _mapper;
+        public QuestionController(IQuestionService service, IMapper mapper)
         {
             _questionService = service;
+            _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Question>> GetAllQuestions()
+        public ActionResult<IEnumerable<QuestionDto>> GetAllQuestions()
         {
             var questions = _questionService.GetAllQuestions();
             return Ok(questions);
         }
         [HttpGet("random")]
-        public ActionResult<Question> GetRandomQuestion()
+        public ActionResult<QuestionDto> GetRandomQuestion()
         {
             var question = _questionService.GetRandomQuestion();
             return Ok(question);
         }
         [HttpGet("specified")]
-        public ActionResult<Question> GetSpecifiedQuestion([FromBody]RandomSpecifiedDto dto)
+        public ActionResult<QuestionDto> GetSpecifiedQuestion([FromBody]RandomSpecifiedDto dto)
         {
             var question = _questionService.GetSpecifiedQuestion(dto.Points, dto.Level, dto.Category);
+            var questionDto = _mapper.Map<QuestionDto>(question);
 
-            return Ok(question);
+            return Ok(questionDto);
+        }
+        [HttpPost("resolve")]
+        public ActionResult<SingleQuestionSolution> ResolveRandomQuestion([FromBody]Answer answer)
+        {
+            var solution = _questionService.ResolveSingleQuestion(answer);
+
+            return Ok(solution);
         }
     }
 }

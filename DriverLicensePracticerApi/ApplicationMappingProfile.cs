@@ -17,6 +17,7 @@ namespace DriverLicensePracticerApi
         {
             CreateMap<Question, QuestionDto>()
                 .ForMember(x => x.Categories, x => x.MapFrom(x => x.CategoriesToSet));
+            CreateMap<Answer, AnswerDto>();
         }
     }
 }
