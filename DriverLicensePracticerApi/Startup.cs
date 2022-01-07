@@ -82,6 +82,7 @@ namespace DriverLicensePracticerApi
             services.AddScoped<CategoryService>();
             services.AddScoped<IAccountService, AccountService>();  
             services.AddScoped<TestFactory>();
+            services.AddScoped<ITestService, TestService>();    
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -18,19 +18,19 @@ namespace DriverLicensePracticerApi.Controllers
             _questionService = service;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<QuestionDto>> GetAllQuestions()
+        public ActionResult<IEnumerable<Question>> GetAllQuestions()
         {
             var questions = _questionService.GetAllQuestions();
             return Ok(questions);
         }
         [HttpGet("random")]
-        public ActionResult<QuestionDto> GetRandomQuestion()
+        public ActionResult<Question> GetRandomQuestion()
         {
             var question = _questionService.GetRandomQuestion();
             return Ok(question);
         }
         [HttpGet("specified")]
-        public ActionResult<QuestionDto> GetSpecifiedQuestion([FromBody]RandomSpecifiedDto dto)
+        public ActionResult<Question> GetSpecifiedQuestion([FromBody]RandomSpecifiedDto dto)
         {
             var question = _questionService.GetSpecifiedQuestion(dto.Points, dto.Level, dto.Category);
 

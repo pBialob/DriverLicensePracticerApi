@@ -1,8 +1,12 @@
 ﻿using DriverLicensePracticerApi.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DriverLicensePracticerApi.Models
 {
+    [Keyless]
+    [NotMapped]
     public class QuestionDto
     {
         public string QuestionNumber { get; set; }
@@ -13,11 +17,9 @@ namespace DriverLicensePracticerApi.Models
         public string MediaPath { get; set; }
         public string QuestionLevel { get; set; }
         public string Points { get; set; }
-        public string CategoriesToSet { get; set; }
+        public string Categories { get; set; }
         public string QuestionOrigin { get; set; }
         public string QuestionReason { get; set; }
         public string SafetyExplanation { get; set; }
-
-        public ICollection<CategoryDto> Categories { get; set; }
     }
 }

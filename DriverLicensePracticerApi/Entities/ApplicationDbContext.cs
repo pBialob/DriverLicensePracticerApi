@@ -1,4 +1,5 @@
 ﻿using DriverLicensePracticerApi.Entities;
+using DriverLicensePracticerApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DriverLicensePracticerApi.Entities
@@ -12,8 +13,11 @@ namespace DriverLicensePracticerApi.Entities
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<QuestionCategory>().HasKey(sc => new { sc.CategoryId, sc.QuestionId });
 
             modelBuilder.Entity<QuestionCategory>()
@@ -34,6 +38,7 @@ namespace DriverLicensePracticerApi.Entities
             modelBuilder.Entity<Role>()
                 .Property(r => r.Name)
                 .IsRequired();
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

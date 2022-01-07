@@ -1,4 +1,4 @@
-﻿using DriverLicensePracticerApi.Models;
+﻿using DriverLicensePracticerApi.Entities;
 using System.Collections.Generic;
 
 
@@ -14,9 +14,9 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
         {
             _questionService = questionService;
         }
-        public override List<QuestionDto> GetTest()
+        public override List<Question> GetTest()
         {
-            var test = new List<QuestionDto>();
+            var test = new List<Question>();
             test.AddRange(base.GetPrimaryPart(_questionService, primaryLevel, category));
             test.AddRange(base.GetSpecialistPart(_questionService, specialistLevel, category)); 
 

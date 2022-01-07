@@ -4,6 +4,7 @@ using DriverLicensePracticerApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriverLicensePracticerApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220106174627_TestSolvingUpdate")]
+    partial class TestSolvingUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,36 +23,6 @@ namespace DriverLicensePracticerApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("DriverLicensePracticerApi.Entities.Answer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CorrectAnswer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GivenAnswer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuestionNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Result")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("Answers");
-                });
 
             modelBuilder.Entity("DriverLicensePracticerApi.Entities.Category", b =>
                 {
@@ -163,16 +135,18 @@ namespace DriverLicensePracticerApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("IsResolved")
-                        .HasColumnType("bit");
+                    b.Property<string>("Score")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Score")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Tests");
                 });
@@ -208,30 +182,6 @@ namespace DriverLicensePracticerApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("QuestionTest", b =>
-                {
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TestsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionsId", "TestsId");
-
-                    b.HasIndex("TestsId");
-
-                    b.ToTable("QuestionTest");
-                });
-
-            modelBuilder.Entity("DriverLicensePracticerApi.Entities.Answer", b =>
-                {
-                    b.HasOne("DriverLicensePracticerApi.Entities.Test", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DriverLicensePracticerApi.Entities.QuestionCategory", b =>
                 {
                     b.HasOne("DriverLicensePracticerApi.Entities.Category", "Category")
@@ -251,6 +201,15 @@ namespace DriverLicensePracticerApi.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("DriverLicensePracticerApi.Entities.Test", b =>
+                {
+                    b.HasOne("DriverLicensePracticerApi.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DriverLicensePracticerApi.Entities.User", b =>
                 {
                     b.HasOne("DriverLicensePracticerApi.Entities.Role", "role")
@@ -262,21 +221,6 @@ namespace DriverLicensePracticerApi.Migrations
                     b.Navigation("role");
                 });
 
-            modelBuilder.Entity("QuestionTest", b =>
-                {
-                    b.HasOne("DriverLicensePracticerApi.Entities.Question", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DriverLicensePracticerApi.Entities.Test", null)
-                        .WithMany()
-                        .HasForeignKey("TestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DriverLicensePracticerApi.Entities.Category", b =>
                 {
                     b.Navigation("QuestionCategories");
@@ -285,11 +229,6 @@ namespace DriverLicensePracticerApi.Migrations
             modelBuilder.Entity("DriverLicensePracticerApi.Entities.Question", b =>
                 {
                     b.Navigation("QuestionCategories");
-                });
-
-            modelBuilder.Entity("DriverLicensePracticerApi.Entities.Test", b =>
-                {
-                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

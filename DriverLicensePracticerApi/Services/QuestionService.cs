@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DriverLicensePracticerApi.Entities;
-using DriverLicensePracticerApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -10,9 +9,9 @@ namespace DriverLicensePracticerApi.Services
 {
     public interface IQuestionService
     {
-        QuestionDto GetRandomQuestion();
-        IEnumerable<QuestionDto> GetAllQuestions();
-        public QuestionDto GetSpecifiedQuestion(string points, string level, string category);
+        Question GetRandomQuestion();
+        IEnumerable<Question> GetAllQuestions();
+        public Question GetSpecifiedQuestion(string points, string level, string category);
     }
 
     public class QuestionService : IQuestionService
@@ -26,38 +25,27 @@ namespace DriverLicensePracticerApi.Services
             _mapper = mapper;
             _appMappingProfile = applicationMappingProfile;
         }
-        public QuestionDto GetRandomQuestion()
+        public Question GetRandomQuestion()
         {   
             var questionBaseSize = _context.Questions.OrderByDescending(i => i.Id).FirstOrDefault().Id;
             var question = _context.Questions.FirstOrDefault(x=>x.Id == RandomId(questionBaseSize));
-            var questionDto = MapQuestion(question);
 
-            return questionDto;
+            return question;
         }
-        public IEnumerable<QuestionDto> GetAllQuestions()
+        public IEnumerable<Question> GetAllQuestions()
         {
             var questions = _context.Questions.ToList();
-            var result = _mapper.Map<List<QuestionDto>>(questions);
+            if (questions == null) throw new Exception("Question hasn't been found");
 
-            return result;
+            return questions;
         }
         
-        public QuestionDto GetSpecifiedQuestion(string points, string level, string category)
+        public Question GetSpecifiedQuestion(string points, string level, string category)
         {
             var questions = _context.QuestionCategories.Where(x=>(x.Category.Name == category) && (x.Question.QuestionLevel == level) && (x.Question.Points == points)).ToList();
-            var questionDto = MapQuestion(_context.Questions.Where(x=>x.Id == questions[RandomId(questions.Count)].QuestionId).FirstOrDefault());
-            return questionDto;
-        }
+            var question = _context.Questions.FirstOrDefault(x=>x.Id == questions[RandomId(questions.Count)].QuestionId);
 
-        private QuestionDto MapQuestion(Question question)
-        {
-            var questionCategories = _context.QuestionCategories.Where(x=>x.QuestionId == question.Id).ToList();
-            var questionCategoriesDto = _mapper.Map<List<CategoryDto>>(questionCategories);
-            var questionDto = _mapper.Map<QuestionDto>(question);
-            questionDto.Categories = questionCategoriesDto;
-            _appMappingProfile.MapCategoryName(questionDto);
-
-            return questionDto;
+            return question;
         }
 
         private int RandomId(int range)

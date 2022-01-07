@@ -1,43 +1,42 @@
 ﻿using AutoMapper;
 using DriverLicensePracticerApi.Entities;
-using DriverLicensePracticerApi.Models;
 using System.Collections.Generic;
 
 namespace DriverLicensePracticerApi.Services.TestGenerator
 {
     public abstract class ITestGenerator
     {
-        public abstract List<QuestionDto> GetTest();
-        protected List<QuestionDto> GetPrimaryPart(IQuestionService questionService, string level, string category)
+        public abstract List<Question> GetTest();
+        protected List<Question> GetPrimaryPart(IQuestionService questionService, string level, string category)
         {
-            var questions = new List<QuestionDto>();
-            for (int i = 0; i < 10; i++)
+            var questions = new List<Question>();
+            for (int i = 0; i < 1; i++)
             {
                 questions.Add(questionService.GetSpecifiedQuestion("3", level, category));
             }
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 1; i++)
             {
                 questions.Add(questionService.GetSpecifiedQuestion("2", level, category));
             }
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 1; i++)
             {
                 questions.Add(questionService.GetSpecifiedQuestion("1", level, category));
             }
 
             return questions;
         }
-        protected List<QuestionDto> GetSpecialistPart(IQuestionService questionService, string level, string category)
+        protected List<Question> GetSpecialistPart(IQuestionService questionService, string level, string category)
         {
-            var questions = new List<QuestionDto>();
-            for (int i = 0; i < 6; i++)
+            var questions = new List<Question>();
+            for (int i = 0; i < 1; i++)
             {
                 questions.Add(questionService.GetSpecifiedQuestion("3", level, category));
             }
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 1; i++)
             {
                 questions.Add(questionService.GetSpecifiedQuestion("2", level, category));
             }
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 questions.Add(questionService.GetSpecifiedQuestion("1", level, category));
             }

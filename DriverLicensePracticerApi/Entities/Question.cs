@@ -25,5 +25,6 @@ namespace DriverLicensePracticerApi.Entities
         public string SafetyExplanation { get; set; }
 
         public virtual ICollection<QuestionCategory> QuestionCategories { get; set; }
+        public virtual ICollection<Test> Tests { get; set; }
     }
 }
