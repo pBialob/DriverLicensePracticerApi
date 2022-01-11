@@ -59,8 +59,6 @@ namespace DriverLicensePracticerApi.Services
             if (test == null) throw new Exception("Test not found");
             if (test.IsResolved) throw new Exception("Test has been already resolved");
 
-            test.Answers = answers;
-            test.IsResolved = true;
             foreach (var answer in answers)
             {
                 var question = _context.Questions.FirstOrDefault(x => x.QuestionNumber == answer.QuestionNumber);
@@ -73,6 +71,9 @@ namespace DriverLicensePracticerApi.Services
                 answer.CorrectAnswer = question.CorrectAnswer; 
             }
 
+            test.Answers = answers;
+            test.IsResolved = true;
+
             _context.Answers.AddRange(answers);
             _context.SaveChanges();
 
@@ -80,7 +81,7 @@ namespace DriverLicensePracticerApi.Services
             {
                 TestId=test.Id,
                 Questions = _mapper.Map<List<QuestionDto>>(GetTestQuestions(answers)),
-                Answers = answers,
+                Answers = test.Answers,
                 Score = test.Score,
                 IsResolved = test.IsResolved,
             };

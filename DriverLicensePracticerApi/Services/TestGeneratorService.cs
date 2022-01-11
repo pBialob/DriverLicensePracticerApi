@@ -28,17 +28,29 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
         private List<Question> GetPrimaryPart(IQuestionService questionService, string level, string category)
         {
             var questions = new List<Question>();
-            for (int i = 0; i < 1; i++)
+            while(questions.Count != 10)
             {
-                questions.Add(questionService.GetSpecifiedQuestion("3", level, category));
+                var question = questionService.GetSpecifiedQuestion("3", level, category);
+                if (!HasQuestionRepeated(questions, question))
+                {
+                    questions.Add(question);
+                }
             }
-            for (int i = 0; i < 1; i++)
+            while (questions.Count != 16)
             {
-                questions.Add(questionService.GetSpecifiedQuestion("2", level, category));
+                var question = questionService.GetSpecifiedQuestion("2", level, category);
+                if (!HasQuestionRepeated(questions, question))
+                {
+                    questions.Add(question);
+                }
             }
-            for (int i = 0; i < 1; i++)
+            while (questions.Count != 19)
             {
-                questions.Add(questionService.GetSpecifiedQuestion("1", level, category));
+                var question = questionService.GetSpecifiedQuestion("1", level, category);
+                if (!HasQuestionRepeated(questions, question))
+                {
+                    questions.Add(question);
+                }
             }
 
             return questions;
@@ -46,20 +58,39 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
         private List<Question> GetSpecialistPart(IQuestionService questionService, string level, string category)
         {
             var questions = new List<Question>();
-            for (int i = 0; i < 1; i++)
+            while(questions.Count != 10)
             {
-                questions.Add(questionService.GetSpecifiedQuestion("3", level, category));
+                var question = questionService.GetSpecifiedQuestion("3", level, category);
+                if (!HasQuestionRepeated(questions, question))
+                {
+                    questions.Add(question);
+                }
             }
-            for (int i = 0; i < 1; i++)
+            while (questions.Count != 16)
             {
-                questions.Add(questionService.GetSpecifiedQuestion("2", level, category));
+                var question = questionService.GetSpecifiedQuestion("2", level, category);
+                if (!HasQuestionRepeated(questions, question))
+                {
+                    questions.Add(question);
+                }
             }
-            for (int i = 0; i < 1; i++)
+            while (questions.Count != 19)
             {
-                questions.Add(questionService.GetSpecifiedQuestion("1", level, category));
+                var question = questionService.GetSpecifiedQuestion("1", level, category);
+                if (!HasQuestionRepeated(questions, question))
+                {
+                    questions.Add(question);
+                }
             }
 
             return questions;
+        }
+
+        bool HasQuestionRepeated(List<Question> questions, Question question)
+        {
+            if (questions.Contains(question))
+                return true;
+            return false;
         }
     }
 }
