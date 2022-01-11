@@ -1,13 +1,31 @@
-﻿using AutoMapper;
-using DriverLicensePracticerApi.Entities;
+﻿using DriverLicensePracticerApi.Entities;
 using System.Collections.Generic;
 
-namespace DriverLicensePracticerApi.Services.TestGenerator
+
+namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
 {
-    public abstract class ITestGenerator
+    public interface ITestGenerator
     {
-        public abstract List<Question> GetTest();
-        protected List<Question> GetPrimaryPart(IQuestionService questionService, string level, string category)
+        public List<Question> GetTest(string category);
+    }
+    public class TestGeneratorService : ITestGenerator
+    {
+        private const string primaryLevel = "PODSTAWOWY";
+        private const string specialistLevel = "SPECJALISTYCZNY";
+        private readonly IQuestionService _questionService;
+        public TestGeneratorService(IQuestionService questionService)
+        {
+            _questionService = questionService;
+        }
+        public List<Question> GetTest(string category)
+        {
+            var test = new List<Question>();
+            test.AddRange(GetPrimaryPart(_questionService, primaryLevel, category));
+            test.AddRange(GetSpecialistPart(_questionService, specialistLevel, category));
+
+            return test;
+        }
+        private List<Question> GetPrimaryPart(IQuestionService questionService, string level, string category)
         {
             var questions = new List<Question>();
             for (int i = 0; i < 1; i++)
@@ -25,7 +43,7 @@ namespace DriverLicensePracticerApi.Services.TestGenerator
 
             return questions;
         }
-        protected List<Question> GetSpecialistPart(IQuestionService questionService, string level, string category)
+        private List<Question> GetSpecialistPart(IQuestionService questionService, string level, string category)
         {
             var questions = new List<Question>();
             for (int i = 0; i < 1; i++)

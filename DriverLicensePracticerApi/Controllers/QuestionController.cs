@@ -10,7 +10,7 @@ namespace DriverLicensePracticerApi.Controllers
 {
     [Route("api/question")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class QuestionController : ControllerBase
     {
         private readonly IQuestionService _questionService;

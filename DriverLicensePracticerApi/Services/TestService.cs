@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System;
 using System.Data.Entity;
 using AutoMapper;
+using DriverLicensePracticerApi.Services.TestGenerator.Tests;
 
 namespace DriverLicensePracticerApi.Services
 {
@@ -21,19 +22,19 @@ namespace DriverLicensePracticerApi.Services
     public class TestService : ITestService
     {
         private readonly ApplicationDbContext _context;
-        private readonly TestFactory _factory;
+        private readonly ITestGenerator _testGenerator;
         private readonly IHttpContextAccessor _http;
         private readonly IMapper _mapper;
-        public TestService(ApplicationDbContext context, TestFactory testFactory, IHttpContextAccessor http, IMapper mapper)
+        public TestService(ApplicationDbContext context, ITestGenerator testGenerator, IHttpContextAccessor http, IMapper mapper)
         {
-            _factory = testFactory;
+            _testGenerator = testGenerator;
             _context = context;
             _http = http;
             _mapper = mapper;
         }
         public TestDto GenerateTestQuestions(string category)
         {
-            var questions = _factory.GenerateTest(category).GetTest();
+            var questions = _testGenerator.GetTest(category);
             var test = new Test()
             {
                 Questions = questions,

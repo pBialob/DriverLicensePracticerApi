@@ -9,7 +9,7 @@ namespace DriverLicensePracticerApi.Controllers
 {
     [ApiController]
     [Route("api/test")]
-    [Authorize]
+    //[Authorize]
     public class TestController : ControllerBase
     {
         private readonly ITestService _testService;
