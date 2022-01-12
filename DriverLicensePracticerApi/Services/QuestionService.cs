@@ -20,14 +20,12 @@ namespace DriverLicensePracticerApi.Services
 
     public class QuestionService : IQuestionService
     {
-        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IQuestionRepository _questionRepository;
 
-        public QuestionService(ApplicationDbContext context, IMapper mapper, ILogger<QuestionService> logger, IQuestionRepository questionRepository)
+        public QuestionService(IMapper mapper, ILogger<QuestionService> logger, IQuestionRepository questionRepository)
         {
-            _context = context;
             _mapper = mapper;
             _logger = logger;
             _questionRepository = questionRepository;

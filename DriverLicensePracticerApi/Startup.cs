@@ -60,6 +60,7 @@ namespace DriverLicensePracticerApi
             });
 
             services.AddDbContext<ApplicationDbContext>();
+            services.Configure<TestConfiguration>(Configuration.GetSection("TestConfiguration"));
 
             services.AddScoped<ApplicationMappingProfile>();
             services.AddAutoMapper(this.GetType().Assembly);

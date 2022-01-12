@@ -1,5 +1,7 @@
-﻿using DriverLicensePracticerApi.Entities;
+﻿using AutoMapper.Configuration;
+using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Repositories;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
 
@@ -14,84 +16,26 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
         private const string primaryLevel = "PODSTAWOWY";
         private const string specialistLevel = "SPECJALISTYCZNY";
         private readonly IQuestionRepository _questionRepository;
-        public TestGeneratorService(IQuestionRepository questionRepository)
+        private readonly IOptions<TestConfiguration> _testConfiguration;
+
+        public TestGeneratorService(IQuestionRepository questionRepository, IOptions<TestConfiguration> testConfiguration)
         {
-            _questionRepository = questionRepository;   
+            _questionRepository = questionRepository;
+            _testConfiguration = testConfiguration;
         }
+
         public List<Question> GetTest(string category)
         {
             var test = new List<Question>();
-            test.AddRange(GetPrimaryPart(primaryLevel, category));
-            test.AddRange(GetSpecialistPart(specialistLevel, category));
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("3", _testConfiguration.Value.PrimaryPart.Level, category, _testConfiguration.Value.PrimaryPart.ThreePointsQuestionCout)); 
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("2", _testConfiguration.Value.PrimaryPart.Level, category, _testConfiguration.Value.PrimaryPart.TwoPointsQuestionCout)); 
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("1", _testConfiguration.Value.PrimaryPart.Level, category, _testConfiguration.Value.PrimaryPart.OnePointsQuestionCout)); 
+           
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("3", _testConfiguration.Value.SpecialistPart.Level, category, _testConfiguration.Value.PrimaryPart.ThreePointsQuestionCout)); 
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("2", _testConfiguration.Value.SpecialistPart.Level, category, _testConfiguration.Value.PrimaryPart.TwoPointsQuestionCout)); 
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("1", _testConfiguration.Value.SpecialistPart.Level, category, _testConfiguration.Value.PrimaryPart.OnePointsQuestionCout)); 
 
             return test;
-        }
-        private List<Question> GetPrimaryPart(string level, string category)
-        {
-            var questions = new List<Question>();
-            while(questions.Count != 10)
-            {
-                var question = _questionRepository.GetSpecifiedQuestion("3", level, category);
-                if (!HasQuestionRepeated(questions, question))
-                {
-                    questions.Add(question);
-                }
-            }
-            while (questions.Count != 16)
-            {
-                var question = _questionRepository.GetSpecifiedQuestion("2", level, category);
-                if (!HasQuestionRepeated(questions, question))
-                {
-                    questions.Add(question);
-                }
-            }
-            while (questions.Count != 19)
-            {
-                var question = _questionRepository.GetSpecifiedQuestion("1", level, category);
-                if (!HasQuestionRepeated(questions, question))
-                {
-                    questions.Add(question);
-                }
-            }
-
-            return questions;
-        }
-        private List<Question> GetSpecialistPart(string level, string category)
-        {
-            var questions = new List<Question>();
-            while(questions.Count != 10)
-            {
-                var question = _questionRepository.GetSpecifiedQuestion("3", level, category);
-                if (!HasQuestionRepeated(questions, question))
-                {
-                    questions.Add(question);
-                }
-            }
-            while (questions.Count != 16)
-            {
-                var question = _questionRepository.GetSpecifiedQuestion("2", level, category);
-                if (!HasQuestionRepeated(questions, question))
-                {
-                    questions.Add(question);
-                }
-            }
-            while (questions.Count != 19)
-            {
-                var question = _questionRepository.GetSpecifiedQuestion("1", level, category);
-                if (!HasQuestionRepeated(questions, question))
-                {
-                    questions.Add(question);
-                }
-            }
-
-            return questions;
-        }
-
-        bool HasQuestionRepeated(List<Question> questions, Question question)
-        {
-            if (questions.Contains(question))
-                return true;
-            return false;
         }
     }
 }

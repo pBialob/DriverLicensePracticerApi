@@ -11,6 +11,7 @@ namespace DriverLicensePracticerApi.Repositories
         Question GetRandomQuestion();
         public List<Question> GetAllQuestions();
         public Question GetSpecifiedQuestion(string points, string level, string category);
+        public List<Question> GetSpecifiedQuestions(string points, string level, string category, int count);
         public Question GetQuestionByNumber(string number);
         void Save();
     }
@@ -61,6 +62,19 @@ namespace DriverLicensePracticerApi.Repositories
             if (question == null) throw new Exception("Question not found");
 
             return question;
+
+        }
+        public List<Question> GetSpecifiedQuestions(string points, string level, string category, int count)
+        {
+            var questions = _context.Questions
+                .Include(c => c.QuestionCategories)
+                .Where(q => q.QuestionCategories.Any(qc => qc.Category.Name == category) && (q.Points == points) && (q.QuestionLevel == level))
+                .OrderBy(qs => Guid.NewGuid())
+                .Take(count).ToList();
+
+            if (questions == null) throw new Exception("Questions not found");
+
+            return questions;
         }
 
         public Question GetQuestionByNumber(string number)
