@@ -1,26 +1,20 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DriverLicensePracticerApi.Seeders;
 using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Services;
-using DriverLicensePracticerApi.Services.TestGenerator;
 using Microsoft.AspNetCore.Identity;
 using DriverLicensePracticerApi.Models.Validators;
 using DriverLicensePracticerApi.Models;
 using System.Text;
+using DriverLicensePracticerApi.Services.TestGenerator.Tests;
+using DriverLicensePracticerApi.Repositories;
 
 namespace DriverLicensePracticerApi
 {
@@ -79,10 +73,11 @@ namespace DriverLicensePracticerApi
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IQuestionService, QuestionService>();
-            services.AddScoped<CategoryService>();
-            services.AddScoped<IAccountService, AccountService>();  
-            services.AddScoped<TestFactory>();
-            services.AddScoped<ITestService, TestService>();    
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITestGeneratorService, TestGeneratorService>();
+            services.AddScoped<ITestService, TestService>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

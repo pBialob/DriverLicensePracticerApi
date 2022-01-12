@@ -9,5 +9,10 @@
         public int? TestId { get; set; }
         public string QuestionNumber { get; set; }
 
+        public void ResolveQuestion(Question question)
+        {
+            if(question.CorrectAnswer == GivenAnswer) Result = true;
+
+        }
     }
 }

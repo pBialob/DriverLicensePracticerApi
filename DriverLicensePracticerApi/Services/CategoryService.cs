@@ -5,7 +5,12 @@ using System.Linq;
 
 namespace DriverLicensePracticerApi.Services
 {
-    public class CategoryService
+    public interface ICategoryService
+    {
+        void SetupCategories(string categoriesToSplit, int questionId);
+    }
+
+    public class CategoryService : ICategoryService
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -14,7 +19,7 @@ namespace DriverLicensePracticerApi.Services
             _dbContext = dbContext;
         }
 
-        public void setupCategories(string categoriesToSplit, int questionId)
+        public void SetupCategories(string categoriesToSplit, int questionId)
         {
             var question = _dbContext.Questions.Include(x => x.QuestionCategories).FirstOrDefault(x => x.Id == questionId);
             var splittedCategories = categoriesToSplit.Split(',').ToList();

@@ -8,11 +8,6 @@ namespace DriverLicensePracticerApi
 
     public class ApplicationMappingProfile : Profile
     {
-        private readonly ApplicationDbContext _context;
-        public ApplicationMappingProfile(ApplicationDbContext dbContext)
-        {
-            _context = dbContext;
-        }
         public ApplicationMappingProfile()
         {
             CreateMap<Question, QuestionDto>()

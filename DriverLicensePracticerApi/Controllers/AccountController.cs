@@ -1,11 +1,10 @@
 ﻿using DriverLicensePracticerApi.Models;
 using DriverLicensePracticerApi.Services;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DriverLicensePracticerApi.Controllers
 {
-    [Microsoft.AspNetCore.Mvc.Route("api/account")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {

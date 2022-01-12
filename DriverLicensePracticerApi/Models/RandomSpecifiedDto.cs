@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DriverLicensePracticerApi.Models
 {
-    [Keyless]
-    [NotMapped]
     public class RandomSpecifiedDto
     {
         public string Points { get; set; }

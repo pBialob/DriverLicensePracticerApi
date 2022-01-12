@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DriverLicensePracticerApi.Models
 {
-    [Keyless]
-    [NotMapped]
     public class AnswerDto
     {
         public string QuestionNumber { get; set; }

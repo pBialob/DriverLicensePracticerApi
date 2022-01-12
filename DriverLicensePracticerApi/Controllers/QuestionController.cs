@@ -10,36 +10,42 @@ namespace DriverLicensePracticerApi.Controllers
 {
     [Route("api/question")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class QuestionController : ControllerBase
     {
         private readonly IQuestionService _questionService;
         private readonly IMapper _mapper;
+
         public QuestionController(IQuestionService service, IMapper mapper)
         {
             _questionService = service;
             _mapper = mapper;
         }
+
         [HttpGet]
         public ActionResult<IEnumerable<QuestionDto>> GetAllQuestions()
         {
-            var questions = _questionService.GetAllQuestions();
+            var questions = _questionService.GetAllQuestionsDto();
+
             return Ok(questions);
         }
+
         [HttpGet("random")]
         public ActionResult<QuestionDto> GetRandomQuestion()
         {
-            var question = _questionService.GetRandomQuestion();
+            var question = _questionService.GetRandomQuestionDto();
+
             return Ok(question);
         }
+
         [HttpGet("specified")]
         public ActionResult<QuestionDto> GetSpecifiedQuestion([FromBody]RandomSpecifiedDto dto)
         {
-            var question = _questionService.GetSpecifiedQuestion(dto.Points, dto.Level, dto.Category);
-            var questionDto = _mapper.Map<QuestionDto>(question);
+            var question = _questionService.GetSpecifiedQuestionDto(dto.Points, dto.Level, dto.Category);
 
-            return Ok(questionDto);
+            return Ok(question);
         }
+
         [HttpPost("resolve")]
         public ActionResult<SingleQuestionSolution> ResolveRandomQuestion([FromBody]Answer answer)
         {

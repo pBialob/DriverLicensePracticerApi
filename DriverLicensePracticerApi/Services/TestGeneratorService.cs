@@ -1,36 +1,37 @@
 ﻿using DriverLicensePracticerApi.Entities;
+using DriverLicensePracticerApi.Repositories;
 using System.Collections.Generic;
 
 
 namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
 {
-    public interface ITestGenerator
+    public interface ITestGeneratorService
     {
         public List<Question> GetTest(string category);
     }
-    public class TestGeneratorService : ITestGenerator
+    public class TestGeneratorService : ITestGeneratorService
     {
         private const string primaryLevel = "PODSTAWOWY";
         private const string specialistLevel = "SPECJALISTYCZNY";
-        private readonly IQuestionService _questionService;
-        public TestGeneratorService(IQuestionService questionService)
+        private readonly IQuestionRepository _questionRepository;
+        public TestGeneratorService(IQuestionRepository questionRepository)
         {
-            _questionService = questionService;
+            _questionRepository = questionRepository;   
         }
         public List<Question> GetTest(string category)
         {
             var test = new List<Question>();
-            test.AddRange(GetPrimaryPart(_questionService, primaryLevel, category));
-            test.AddRange(GetSpecialistPart(_questionService, specialistLevel, category));
+            test.AddRange(GetPrimaryPart(primaryLevel, category));
+            test.AddRange(GetSpecialistPart(specialistLevel, category));
 
             return test;
         }
-        private List<Question> GetPrimaryPart(IQuestionService questionService, string level, string category)
+        private List<Question> GetPrimaryPart(string level, string category)
         {
             var questions = new List<Question>();
             while(questions.Count != 10)
             {
-                var question = questionService.GetSpecifiedQuestion("3", level, category);
+                var question = _questionRepository.GetSpecifiedQuestion("3", level, category);
                 if (!HasQuestionRepeated(questions, question))
                 {
                     questions.Add(question);
@@ -38,7 +39,7 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
             }
             while (questions.Count != 16)
             {
-                var question = questionService.GetSpecifiedQuestion("2", level, category);
+                var question = _questionRepository.GetSpecifiedQuestion("2", level, category);
                 if (!HasQuestionRepeated(questions, question))
                 {
                     questions.Add(question);
@@ -46,7 +47,7 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
             }
             while (questions.Count != 19)
             {
-                var question = questionService.GetSpecifiedQuestion("1", level, category);
+                var question = _questionRepository.GetSpecifiedQuestion("1", level, category);
                 if (!HasQuestionRepeated(questions, question))
                 {
                     questions.Add(question);
@@ -55,12 +56,12 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
 
             return questions;
         }
-        private List<Question> GetSpecialistPart(IQuestionService questionService, string level, string category)
+        private List<Question> GetSpecialistPart(string level, string category)
         {
             var questions = new List<Question>();
             while(questions.Count != 10)
             {
-                var question = questionService.GetSpecifiedQuestion("3", level, category);
+                var question = _questionRepository.GetSpecifiedQuestion("3", level, category);
                 if (!HasQuestionRepeated(questions, question))
                 {
                     questions.Add(question);
@@ -68,7 +69,7 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
             }
             while (questions.Count != 16)
             {
-                var question = questionService.GetSpecifiedQuestion("2", level, category);
+                var question = _questionRepository.GetSpecifiedQuestion("2", level, category);
                 if (!HasQuestionRepeated(questions, question))
                 {
                     questions.Add(question);
@@ -76,7 +77,7 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
             }
             while (questions.Count != 19)
             {
-                var question = questionService.GetSpecifiedQuestion("1", level, category);
+                var question = _questionRepository.GetSpecifiedQuestion("1", level, category);
                 if (!HasQuestionRepeated(questions, question))
                 {
                     questions.Add(question);

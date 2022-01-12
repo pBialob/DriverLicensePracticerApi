@@ -8,8 +8,8 @@ namespace DriverLicensePracticerApi.Seeders
     public class CategorySeeder 
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly CategoryService _categoryService;
-        public CategorySeeder(ApplicationDbContext dbContext, CategoryService categoryService)
+        private readonly ICategoryService _categoryService;
+        public CategorySeeder(ApplicationDbContext dbContext, ICategoryService categoryService)
         {
             _dbContext = dbContext;
             _categoryService = categoryService;
@@ -52,7 +52,7 @@ namespace DriverLicensePracticerApi.Seeders
         {
             foreach (var question in questions)
             {
-                _categoryService.setupCategories(question.CategoriesToSet, question.Id);
+                _categoryService.SetupCategories(question.CategoriesToSet, question.Id);
             }
         }
     }

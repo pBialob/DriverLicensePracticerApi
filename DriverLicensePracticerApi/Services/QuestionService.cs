@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
+using DriverLicensePracticerApi.Repositories;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -10,9 +12,9 @@ namespace DriverLicensePracticerApi.Services
 {
     public interface IQuestionService
     {
-        QuestionDto GetRandomQuestion();
-        IEnumerable<QuestionDto> GetAllQuestions();
-        public Question GetSpecifiedQuestion(string points, string level, string category);
+        QuestionDto GetRandomQuestionDto();
+        IEnumerable<QuestionDto> GetAllQuestionsDto();
+        public QuestionDto GetSpecifiedQuestionDto(string points, string level, string category);
         public SingleQuestionSolution ResolveSingleQuestion(Answer answer);
     }
 
@@ -20,60 +22,49 @@ namespace DriverLicensePracticerApi.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public QuestionService(ApplicationDbContext context, IMapper mapper)
+        private readonly ILogger _logger;
+        private readonly IQuestionRepository _questionRepository;
+
+        public QuestionService(ApplicationDbContext context, IMapper mapper, ILogger<QuestionService> logger, IQuestionRepository questionRepository)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
+            _questionRepository = questionRepository;
         }
-        public QuestionDto GetRandomQuestion()
+
+        public QuestionDto GetRandomQuestionDto()
         {   
-            var questionBaseSize = _context.Questions.OrderByDescending(i => i.Id).FirstOrDefault().Id;
-            var question = _context.Questions.FirstOrDefault(x=>x.Id == RandomId(questionBaseSize));
-            if (question == null) throw new Exception("Question not found");
-            var questionDto = _mapper.Map<QuestionDto>(question);
+            var question = _questionRepository.GetRandomQuestion();
 
-            return questionDto;
+            return _mapper.Map<QuestionDto>(question); 
         }
-        public IEnumerable<QuestionDto> GetAllQuestions()
-        {
-            var questions = _context.Questions.ToList();
-            if (questions == null) throw new Exception("Question hasn't been found");
-            var questionsDto = _mapper.Map<List<QuestionDto>>(questions);
 
-            return questionsDto;
+        public IEnumerable<QuestionDto> GetAllQuestionsDto()
+        {
+            var questions = _questionRepository.GetAllQuestions();
+
+            return _mapper.Map<List<QuestionDto>>(questions);
         }
-        
-        public Question GetSpecifiedQuestion(string points, string level, string category)
-        {
-            var questions = _context.QuestionCategories.Where(x=>(x.Category.Name == category) && (x.Question.QuestionLevel == level) && (x.Question.Points == points)).ToList();
-            var question = _context.Questions.FirstOrDefault(x=>x.Id == questions[RandomId(questions.Count)].QuestionId);
-            if (question == null) throw new Exception("Question not found");
 
-            return question;
+        public QuestionDto GetSpecifiedQuestionDto(string points, string level, string category)
+        {
+            var question = _questionRepository.GetSpecifiedQuestion(points, level, category);
+
+            return _mapper.Map<QuestionDto>(question);
         }
 
         public SingleQuestionSolution ResolveSingleQuestion(Answer answer)
         {
-            var question = _context.Questions.FirstOrDefault(x => x.QuestionNumber == answer.QuestionNumber);
-            if (question == null) throw new Exception("Question not found");
-            if (answer.GivenAnswer == question.CorrectAnswer) answer.Result = true;
-            answer.CorrectAnswer = question.CorrectAnswer;
+            var question = _questionRepository.GetQuestionByNumber(answer.QuestionNumber);
 
-            var solution = new SingleQuestionSolution()
+            answer.ResolveQuestion(question);
+
+            return new SingleQuestionSolution()
             {
                 Question = _mapper.Map<QuestionDto>(question),
                 Answer = _mapper.Map<AnswerDto>(answer)
-            };
-
-            return solution;
-        }
-
-        private int RandomId(int range)
-        {
-            var random = new Random();
-            int id = random.Next(range);
-
-            return id;
+            }; 
         }
     }
 }

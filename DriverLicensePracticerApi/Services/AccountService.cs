@@ -52,7 +52,7 @@ namespace DriverLicensePracticerApi.Services
                 throw new Exception("Invalid username or password");
             }
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
-            if (result == Microsoft.AspNetCore.Identity.PasswordVerificationResult.Failed)
+            if (result == PasswordVerificationResult.Failed)
             {
                 throw new Exception("Invalid username or password");
             }

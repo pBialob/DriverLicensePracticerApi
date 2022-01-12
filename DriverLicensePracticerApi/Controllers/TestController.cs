@@ -9,7 +9,7 @@ namespace DriverLicensePracticerApi.Controllers
 {
     [ApiController]
     [Route("api/test")]
-    //[Authorize]
+    [Authorize]
     public class TestController : ControllerBase
     {
         private readonly ITestService _testService;
@@ -33,9 +33,9 @@ namespace DriverLicensePracticerApi.Controllers
         [HttpPost("{testId}")]
         public ActionResult<Test> SolveTest([FromBody]List<Answer> solution, [FromRoute]int testId)
         {
-            var test = _testService.SolveTest(solution, testId);
+            var solvedTest = _testService.SolveTest(solution, testId);
 
-            return Ok(test);
+            return Ok(solvedTest);
         }
 
      }

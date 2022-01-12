@@ -22,10 +22,10 @@ namespace DriverLicensePracticerApi.Services
     public class TestService : ITestService
     {
         private readonly ApplicationDbContext _context;
-        private readonly ITestGenerator _testGenerator;
+        private readonly ITestGeneratorService _testGenerator;
         private readonly IHttpContextAccessor _http;
         private readonly IMapper _mapper;
-        public TestService(ApplicationDbContext context, ITestGenerator testGenerator, IHttpContextAccessor http, IMapper mapper)
+        public TestService(ApplicationDbContext context, ITestGeneratorService testGenerator, IHttpContextAccessor http, IMapper mapper)
         {
             _testGenerator = testGenerator;
             _context = context;
