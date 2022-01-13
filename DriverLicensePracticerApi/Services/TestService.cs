@@ -1,124 +1,58 @@
 ﻿using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
-using DriverLicensePracticerApi.Services.TestGenerator;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System;
-using System.Data.Entity;
 using AutoMapper;
-using DriverLicensePracticerApi.Services.TestGenerator.Tests;
+using DriverLicensePracticerApi.Repositories;
 
 namespace DriverLicensePracticerApi.Services
 {
     public interface ITestService
     {
-        TestDto GenerateTestQuestions(string category);
+        TestDto CreateTestDto(string category);
         TestDto SolveTest(List<Answer> answers, int testId);
-        TestDto GetSpecifiedTest(int testId);
+        TestDto GetSpecifiedTestDto(int testId);
     }
 
     public class TestService : ITestService
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ITestGeneratorService _testGenerator;
         private readonly IHttpContextAccessor _http;
         private readonly IMapper _mapper;
-        public TestService(ApplicationDbContext context, ITestGeneratorService testGenerator, IHttpContextAccessor http, IMapper mapper)
+        private readonly IAnswerRepository _answerRepository;
+        private readonly ITestRepository _testRepository;
+        public TestService(IHttpContextAccessor http, IMapper mapper, IAnswerRepository answerRepository, ITestRepository testRepository)
         {
-            _testGenerator = testGenerator;
-            _context = context;
             _http = http;
             _mapper = mapper;
+            _answerRepository = answerRepository;
+            _testRepository = testRepository;
         }
-        public TestDto GenerateTestQuestions(string category)
+        public TestDto CreateTestDto(string category)
         {
-            var questions = _testGenerator.GetTest(category);
-            var test = new Test()
-            {
-                Questions = questions,
-                UserId = Int32.Parse(_http.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
-            };
-            _context.Tests.Add(test);
-            _context.SaveChanges();
+            var test = _testRepository.Create(category, Int32.Parse(_http.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            _testRepository.Save();
 
-            var testDto = new TestDto()
-            {
-                TestId = test.Id,
-                Questions = _mapper.Map<List<QuestionDto>>(questions)
-            };
+            return _mapper.Map<TestDto>(test);
+        }
 
-            return testDto;
+        public TestDto GetSpecifiedTestDto(int testId)
+        {
+            var test = _testRepository.GetSpecifiedTest(testId);
+            var answers = _answerRepository.GetTestAnswers(testId);
+
+            return _mapper.Map<TestDto>(test, opts=> opts.Items["Answers"] = answers);
         }
 
         public TestDto SolveTest(List<Answer> answers, int testId)
         {
-            var test = _context.Tests.FirstOrDefault(x => x.Id == testId);
+            var test = _testRepository.GetSpecifiedTest(testId);
 
-            if (test == null) throw new Exception("Test not found");
-            if (test.IsResolved) throw new Exception("Test has been already resolved");
+            test.SolveTest(answers);
+            _answerRepository.AddMany(answers);
 
-            foreach (var answer in answers)
-            {
-                var question = _context.Questions.FirstOrDefault(x => x.QuestionNumber == answer.QuestionNumber);
-                if (question == null) throw new Exception("Question not found");
-                if(answer.GivenAnswer == question.CorrectAnswer)
-                {
-                    test.Score += Int32.Parse(question.Points);
-                    answer.Result = true;
-                }
-                answer.CorrectAnswer = question.CorrectAnswer; 
-            }
-
-            test.Answers = answers;
-            test.IsResolved = true;
-
-            _context.Answers.AddRange(answers);
-            _context.SaveChanges();
-
-            var testDto = new TestDto()
-            {
-                TestId=test.Id,
-                Questions = _mapper.Map<List<QuestionDto>>(GetTestQuestions(answers)),
-                Answers = test.Answers,
-                Score = test.Score,
-                IsResolved = test.IsResolved,
-            };
-
-            return testDto;
-        }
-
-        public TestDto GetSpecifiedTest(int testId)
-        {
-            var test = _context.Tests
-                .FirstOrDefault(x => x.Id == testId);
-            if (test == null) throw new Exception("Test not Found");
-
-            var answers = _context.Answers.Where(x=>x.TestId == testId).ToList();
-            var questions = GetTestQuestions(answers);
-
-            var testDto = new TestDto()
-            {
-                TestId = test.Id,
-                Questions = _mapper.Map<List<QuestionDto>>(questions),
-                Answers = answers,
-                Score = test.Score,
-                IsResolved = test.IsResolved
-            };
-
-            return testDto; 
-        }
-
-        private List<Question> GetTestQuestions(List<Answer> answers)
-        {
-            var questions = new List<Question>();
-            foreach (var answer in answers)
-            {
-                questions.Add(_context.Questions.FirstOrDefault(x => x.QuestionNumber == answer.QuestionNumber));
-            }
-
-            return questions;
+            return _mapper.Map<TestDto>(test);
         }
     }
 }

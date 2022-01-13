@@ -20,14 +20,14 @@ namespace DriverLicensePracticerApi.Controllers
        [HttpGet("{category}")]
         public ActionResult<TestDto> GetTestQuestions([FromRoute]string category)
         {
-            var testQuestions = _testService.GenerateTestQuestions(category);
+            var testQuestions = _testService.CreateTestDto(category);
 
             return Ok(testQuestions);
         }
         [HttpGet("specified/{testId}")]
         public ActionResult<Test> GetSpecifiedTest([FromRoute]int testId)
         {
-            var test = _testService.GetSpecifiedTest(testId);
+            var test = _testService.GetSpecifiedTestDto(testId);
             return Ok(test);    
         }
         [HttpPost("{testId}")]

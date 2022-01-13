@@ -13,8 +13,6 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
     }
     public class TestGeneratorService : ITestGeneratorService
     {
-        private const string primaryLevel = "PODSTAWOWY";
-        private const string specialistLevel = "SPECJALISTYCZNY";
         private readonly IQuestionRepository _questionRepository;
         private readonly IOptions<TestConfiguration> _testConfiguration;
 

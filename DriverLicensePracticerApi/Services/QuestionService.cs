@@ -23,12 +23,14 @@ namespace DriverLicensePracticerApi.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IQuestionRepository _questionRepository;
+        private readonly IAnswerRepository _answerRepository;
 
-        public QuestionService(IMapper mapper, ILogger<QuestionService> logger, IQuestionRepository questionRepository)
+        public QuestionService(IMapper mapper, ILogger<QuestionService> logger, IQuestionRepository questionRepository, IAnswerRepository answerRepository)
         {
             _mapper = mapper;
             _logger = logger;
             _questionRepository = questionRepository;
+            _answerRepository = answerRepository;
         }
 
         public QuestionDto GetRandomQuestionDto()
@@ -57,6 +59,8 @@ namespace DriverLicensePracticerApi.Services
             var question = _questionRepository.GetQuestionByNumber(answer.QuestionNumber);
 
             answer.ResolveQuestion(question);
+            _answerRepository.Add(answer);
+            _answerRepository.Save();
 
             return new SingleQuestionSolution()
             {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DriverLicensePracticerApi
@@ -13,6 +14,7 @@ namespace DriverLicensePracticerApi
             CreateMap<Question, QuestionDto>()
                 .ForMember(x => x.Categories, x => x.MapFrom(x => x.CategoriesToSet));
             CreateMap<Answer, AnswerDto>();
+            CreateMap<Test, TestDto>();
         }
     }
 }
