@@ -44,8 +44,12 @@ namespace DriverLicensePracticerApi.Services
 
         public string GenerateJwt(LoginUserDto dto)
         {
-            var user = _dbContext.Users.Where(u => u.Email == dto.Email).FirstOrDefault();
-            user.role = _dbContext.Roles.Where(u => u.Id == user.RoleId).FirstOrDefault();
+            var user = _dbContext.Users
+                .Where(u => u.Email == dto.Email)
+                .FirstOrDefault();
+            user.Role = _dbContext.Roles
+                .Where(u => u.Id == user.RoleId)
+                .FirstOrDefault();
 
             if (user == null)
             {
@@ -61,7 +65,7 @@ namespace DriverLicensePracticerApi.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.FirstName}, {user.LastName}"),
-                new Claim(ClaimTypes.Role, $"{user.role.Name}")
+                new Claim(ClaimTypes.Role, $"{user.Role.Name}")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));

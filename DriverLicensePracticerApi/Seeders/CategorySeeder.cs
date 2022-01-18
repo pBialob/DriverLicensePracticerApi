@@ -1,4 +1,5 @@
 ﻿using DriverLicensePracticerApi.Entities;
+using DriverLicensePracticerApi.Repositories;
 using DriverLicensePracticerApi.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ namespace DriverLicensePracticerApi.Seeders
     public class CategorySeeder 
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ICategoryService _categoryService;
-        public CategorySeeder(ApplicationDbContext dbContext, ICategoryService categoryService)
+        private readonly IQuestionRepository _questionRepository;
+        public CategorySeeder(ApplicationDbContext dbContext, IQuestionRepository questionRepository)
         {
             _dbContext = dbContext;
-            _categoryService = categoryService;
+            _questionRepository = questionRepository;
         }
         public void Seed()
         {
@@ -52,7 +53,7 @@ namespace DriverLicensePracticerApi.Seeders
         {
             foreach (var question in questions)
             {
-                _categoryService.SetupCategories(question.CategoriesToSet, question.Id);
+                _questionRepository.SetupQuestionCategories(question.CategoriesToSet, question.Id);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DriverLicensePracticerApi.Entities
 {
@@ -8,8 +9,9 @@ namespace DriverLicensePracticerApi.Entities
         {
             this.QuestionCategories = new List<QuestionCategory>();
         }
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<QuestionCategory> QuestionCategories { get; set; }
+        public virtual List<QuestionCategory> QuestionCategories { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace DriverLicensePracticerApi.Controllers
             return Ok(testQuestions);
         }
         [HttpGet("specified/{testId}")]
-        public ActionResult<Test> GetSpecifiedTest([FromRoute]int testId)
+        public ActionResult<TestDto> GetSpecifiedTest([FromRoute]int testId)
         {
             var test = _testService.GetSpecifiedTestDto(testId);
             return Ok(test);    

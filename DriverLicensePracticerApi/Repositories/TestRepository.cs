@@ -1,5 +1,6 @@
 ﻿using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Services.TestGenerator.Tests;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
@@ -26,11 +27,13 @@ namespace DriverLicensePracticerApi.Repositories
         public Test Create(string category, int userId)
         {
             var questions = _testGeneratorService.GetTest(category);
+
             var test = new Test()
             {
                 Questions = questions,
                 UserId = userId
             };
+
             _context.Tests.Add(test);
             Save();
 
@@ -44,7 +47,11 @@ namespace DriverLicensePracticerApi.Repositories
 
         public Test GetSpecifiedTest(int testId)
         {
-            var test = _context.Tests.FirstOrDefault(x => x.Id == testId);
+            var test = _context.Tests
+                .Include(x => x.Questions)
+                .Include(x => x.Answers)
+                .FirstOrDefault(x => x.Id == testId);
+
             if (test == null) throw new Exception("Test not Found");
 
             return test;

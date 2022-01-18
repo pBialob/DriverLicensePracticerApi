@@ -25,13 +25,30 @@ namespace DriverLicensePracticerApi.Services.TestGenerator.Tests
         public List<Question> GetTest(string category)
         {
             var test = new List<Question>();
-            test.AddRange(_questionRepository.GetSpecifiedQuestions("3", _testConfiguration.Value.PrimaryPart.Level, category, _testConfiguration.Value.PrimaryPart.ThreePointsQuestionCout)); 
-            test.AddRange(_questionRepository.GetSpecifiedQuestions("2", _testConfiguration.Value.PrimaryPart.Level, category, _testConfiguration.Value.PrimaryPart.TwoPointsQuestionCout)); 
-            test.AddRange(_questionRepository.GetSpecifiedQuestions("1", _testConfiguration.Value.PrimaryPart.Level, category, _testConfiguration.Value.PrimaryPart.OnePointsQuestionCout)); 
+
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("3",
+                _testConfiguration.Value.PrimaryPart.Level, category,
+                _testConfiguration.Value.PrimaryPart.ThreePointsQuestionCout)); 
+
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("2",
+                _testConfiguration.Value.PrimaryPart.Level, category,
+                _testConfiguration.Value.PrimaryPart.TwoPointsQuestionCout)); 
+
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("1",
+                _testConfiguration.Value.PrimaryPart.Level, category,
+                _testConfiguration.Value.PrimaryPart.OnePointsQuestionCout)); 
            
-            test.AddRange(_questionRepository.GetSpecifiedQuestions("3", _testConfiguration.Value.SpecialistPart.Level, category, _testConfiguration.Value.PrimaryPart.ThreePointsQuestionCout)); 
-            test.AddRange(_questionRepository.GetSpecifiedQuestions("2", _testConfiguration.Value.SpecialistPart.Level, category, _testConfiguration.Value.PrimaryPart.TwoPointsQuestionCout)); 
-            test.AddRange(_questionRepository.GetSpecifiedQuestions("1", _testConfiguration.Value.SpecialistPart.Level, category, _testConfiguration.Value.PrimaryPart.OnePointsQuestionCout)); 
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("3",
+                _testConfiguration.Value.SpecialistPart.Level, category,
+                _testConfiguration.Value.PrimaryPart.ThreePointsQuestionCout)); 
+
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("2",
+                _testConfiguration.Value.SpecialistPart.Level, category,
+                _testConfiguration.Value.PrimaryPart.TwoPointsQuestionCout)); 
+
+            test.AddRange(_questionRepository.GetSpecifiedQuestions("1",
+                _testConfiguration.Value.SpecialistPart.Level, category,
+                _testConfiguration.Value.PrimaryPart.OnePointsQuestionCout)); 
 
             return test;
         }

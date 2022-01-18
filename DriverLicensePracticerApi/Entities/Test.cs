@@ -3,13 +3,15 @@ using DriverLicensePracticerApi.Repositories;
 using DriverLicensePracticerApi.Services.TestGenerator.Tests;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DriverLicensePracticerApi.Entities
 {
     public class Test
     {
+        [Key]
         public int Id { get; set; }
-        public List<Answer>? Answers { get; set; }
+        public virtual List<Answer>? Answers { get; set; }
         public int Score { get; set; } = 0;
         public bool IsResolved { get; set; } = false;
 
@@ -17,13 +19,12 @@ namespace DriverLicensePracticerApi.Entities
         public virtual User  User { get; set; }
         public virtual List<Question> Questions { get; set; }
 
-        public void SolveTest(List<Answer> answers)
+          public void SolveTest()
         {
-            if (IsResolved) throw new Exception("Test has been already resolved");
-            Answers = answers;
+            if (this.IsResolved) throw new Exception("Test has been already resolved");
             foreach (var answer in Answers)
             {
-                var question = Questions.Find(Question => Question.QuestionNumber == answer.QuestionNumber);
+                var question = Questions.Find(question => question.QuestionNumber == answer.QuestionNumber);
                 if (question == null) throw new Exception("Question not found");
                 if (answer.GivenAnswer == question.CorrectAnswer)
                 {
@@ -31,9 +32,9 @@ namespace DriverLicensePracticerApi.Entities
                     answer.Result = true;
                 }
                 answer.CorrectAnswer = question.CorrectAnswer;
+                answer.TestId = Id;
             }
-
-            IsResolved = true;
+            this.IsResolved = true;
         }
     }
 }

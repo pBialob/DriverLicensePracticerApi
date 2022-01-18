@@ -3,8 +3,8 @@
     public class QuestionCategory
     {
         public int QuestionId { get; set; }
-        public Question Question { get; set; }
+        public virtual Question Question { get; set; }
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

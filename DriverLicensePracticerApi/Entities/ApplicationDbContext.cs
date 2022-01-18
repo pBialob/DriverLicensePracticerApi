@@ -1,6 +1,7 @@
 ﻿using DriverLicensePracticerApi.Entities;
 using DriverLicensePracticerApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DriverLicensePracticerApi.Entities
 {
@@ -8,6 +9,9 @@ namespace DriverLicensePracticerApi.Entities
     {
         private string _connectionString = "Server=.;Database=DriverLicensePracticerDb;Trusted_Connection=True;";
 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
@@ -18,6 +22,7 @@ namespace DriverLicensePracticerApi.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<QuestionCategory>().HasKey(sc => new { sc.CategoryId, sc.QuestionId });
 
             modelBuilder.Entity<QuestionCategory>()
@@ -39,10 +44,32 @@ namespace DriverLicensePracticerApi.Entities
                 .Property(r => r.Name)
                 .IsRequired();
 
+            modelBuilder.Entity<Test>()
+                .HasOne(t => t.User);
+
+            modelBuilder.Entity<Test>()
+                .HasMany(q => q.Questions)
+                .WithMany(t => t.Tests);
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Tests)
+                .WithMany(t => t.Questions);
+
+            modelBuilder.Entity<Answer>()
+                .HasOne(t => t.Test);
+
+            modelBuilder.Entity<Test>()
+                .HasMany(t => t.Answers)
+                .WithOne(a => a.Test);
+
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connectionString);
+            optionsBuilder.LogTo(Console.WriteLine);
+            optionsBuilder.EnableSensitiveDataLogging();
+        
         }
         
     }

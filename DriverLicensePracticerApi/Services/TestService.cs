@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System;
 using AutoMapper;
 using DriverLicensePracticerApi.Repositories;
+using System.Linq;
 
 namespace DriverLicensePracticerApi.Services
 {
@@ -32,7 +33,6 @@ namespace DriverLicensePracticerApi.Services
         public TestDto CreateTestDto(string category)
         {
             var test = _testRepository.Create(category, Int32.Parse(_http.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)));
-            _testRepository.Save();
 
             return _mapper.Map<TestDto>(test);
         }
@@ -40,17 +40,17 @@ namespace DriverLicensePracticerApi.Services
         public TestDto GetSpecifiedTestDto(int testId)
         {
             var test = _testRepository.GetSpecifiedTest(testId);
-            var answers = _answerRepository.GetTestAnswers(testId);
 
-            return _mapper.Map<TestDto>(test, opts=> opts.Items["Answers"] = answers);
+            return _mapper.Map<TestDto>(test);
         }
 
         public TestDto SolveTest(List<Answer> answers, int testId)
         {
-            var test = _testRepository.GetSpecifiedTest(testId);
-
-            test.SolveTest(answers);
+            var test = _testRepository.GetSpecifiedTest(testId);    
+            test.Answers = answers;
+            test.SolveTest();
             _answerRepository.AddMany(answers);
+            _answerRepository.Save();
 
             return _mapper.Map<TestDto>(test);
         }

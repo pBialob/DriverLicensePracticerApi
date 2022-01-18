@@ -6,6 +6,7 @@ namespace DriverLicensePracticerApi.Models
 {
     public class AnswerDto
     {
+        public int Id { get; set; }
         public string QuestionNumber { get; set; }
         public string GivenAnswer { get; set; }
         public string? CorrectAnswer { get; set; } = "Not set";
