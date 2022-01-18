@@ -72,6 +72,7 @@ namespace DriverLicensePracticerApi
             services.AddHttpContextAccessor();
 
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserValidator>();
+            services.AddScoped<IValidator<QuestionQuery>, QuestionQueryValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();

@@ -23,9 +23,9 @@ namespace DriverLicensePracticerApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<QuestionDto>> GetAllQuestions()
+        public ActionResult<IEnumerable<QuestionDto>> GetAllQuestions([FromQuery]QuestionQuery query)
         {
-            var questions = _questionService.GetAllQuestionsDto();
+            var questions = _questionService.GetAllQuestionsDto(query);
 
             return Ok(questions);
         }

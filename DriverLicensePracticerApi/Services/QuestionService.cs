@@ -12,7 +12,7 @@ namespace DriverLicensePracticerApi.Services
     public interface IQuestionService
     {
         QuestionDto GetRandomQuestionDto();
-        IEnumerable<QuestionDto> GetAllQuestionsDto();
+        PagedResult<QuestionDto> GetAllQuestionsDto(QuestionQuery query);
         public QuestionDto GetSpecifiedQuestionDto(string points, string level, string category);
         public SingleQuestionSolution ResolveSingleQuestion(Answer answer);
     }
@@ -39,11 +39,11 @@ namespace DriverLicensePracticerApi.Services
             return _mapper.Map<QuestionDto>(question); 
         }
 
-        public IEnumerable<QuestionDto> GetAllQuestionsDto()
+        public PagedResult<QuestionDto> GetAllQuestionsDto(QuestionQuery query)
         {
-            var questions = _questionRepository.GetAllQuestions();
+            var questions = _questionRepository.GetAllQuestions(query);
 
-            return _mapper.Map<List<QuestionDto>>(questions);
+            return questions;
         }
 
         public QuestionDto GetSpecifiedQuestionDto(string points, string level, string category)
