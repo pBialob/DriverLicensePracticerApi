@@ -6,7 +6,6 @@ namespace DriverLicensePracticerApi.Entities
 {
     public class Answer
     {
-        [Key]
         public int Id { get; set; }
         public string GivenAnswer { get; set; }
         public string CorrectAnswer { get; set; } = "Not set";

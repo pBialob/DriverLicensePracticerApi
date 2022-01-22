@@ -7,8 +7,6 @@ namespace DriverLicensePracticerApi.Entities
 {
     public class ApplicationDbContext : DbContext
     {
-        private string _connectionString = "Server=.;Database=DriverLicensePracticerDb;Trusted_Connection=True;";
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -66,7 +64,6 @@ namespace DriverLicensePracticerApi.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
             optionsBuilder.LogTo(Console.WriteLine);
             optionsBuilder.EnableSensitiveDataLogging();
         

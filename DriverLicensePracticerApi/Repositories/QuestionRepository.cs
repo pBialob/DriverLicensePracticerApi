@@ -60,7 +60,7 @@ namespace DriverLicensePracticerApi.Repositories
                 .Where(q => query.SearchPoints == null || (q.Points == query.SearchPoints))
                 .Where(q => query.SearchLevel == null || (q.QuestionLevel == query.SearchLevel));
 
-            if(string.IsNullOrEmpty(query.SortBy))
+            if(!string.IsNullOrEmpty(query.SortBy))
             {
                 var columnsSelectors = new Dictionary<string, Expression<Func<Question, object>>>
                 {
@@ -73,7 +73,7 @@ namespace DriverLicensePracticerApi.Repositories
 
                 baseQuery = query.SortDirection == SortDirection.ASC ?
                     baseQuery.OrderBy(selectedCoulum)
-                        : baseQuery.OrderByDescending(selectedCoulum);
+                     : baseQuery.OrderByDescending(selectedCoulum);
             }
 
             var questions = baseQuery

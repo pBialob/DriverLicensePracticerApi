@@ -13,8 +13,8 @@ namespace DriverLicensePracticerApi.Services
 {
     public interface IAccountService
     {
-        string GenerateJwt(LoginUserDto dto);
-        void RegisterUser(RegisterUserDto dto);
+        public string GenerateJwt(LoginUserDto dto);
+        public void RegisterUser(RegisterUserDto dto);
     }
 
     public class AccountService : IAccountService

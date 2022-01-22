@@ -9,7 +9,6 @@ namespace DriverLicensePracticerApi.Entities
 {
     public class Test
     {
-        [Key]
         public int Id { get; set; }
         public virtual List<Answer>? Answers { get; set; }
         public int Score { get; set; } = 0;

@@ -12,9 +12,9 @@ namespace DriverLicensePracticerApi.Services
 {
     public interface ITestService
     {
-        TestDto CreateTestDto(string category);
-        TestDto SolveTest(List<Answer> answers, int testId);
-        TestDto GetSpecifiedTestDto(int testId);
+        public TestDto CreateTestDto(string category);
+        public TestDto SolveTest(List<Answer> answers, int testId);
+        public TestDto GetSpecifiedTestDto(int testId);
     }
 
     public class TestService : ITestService

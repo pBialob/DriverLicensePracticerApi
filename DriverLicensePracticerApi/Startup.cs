@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +14,7 @@ using DriverLicensePracticerApi.Models;
 using System.Text;
 using DriverLicensePracticerApi.Services.TestGenerator.Tests;
 using DriverLicensePracticerApi.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace DriverLicensePracticerApi
 {
@@ -34,8 +34,7 @@ namespace DriverLicensePracticerApi
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
             services.AddSingleton(authenticationSettings);
-
-            object p = services.AddControllers().AddFluentValidation();
+            services.AddControllers();
 
             services.AddAuthentication(option =>
             {
@@ -54,12 +53,14 @@ namespace DriverLicensePracticerApi
                 };
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DriverLicensePracticerApi", Version = "v1" });
-            });
+                        services.AddSwaggerGen(c =>
+                      {
+                          c.SwaggerDoc("v1", new OpenApiInfo { Title = "DriverLicensePracticerApi", Version = "v1" });
+                      });
 
-            services.AddDbContext<ApplicationDbContext>();
+            services.AddHealthChecks();
+            services.AddDbContext<ApplicationDbContext>(options => 
+            options.UseSqlServer(Configuration.GetConnectionString("DriverLicensePractierDb")));
             services.Configure<TestConfiguration>(Configuration.GetSection("TestConfiguration"));
 
             services.AddScoped<ApplicationMappingProfile>();

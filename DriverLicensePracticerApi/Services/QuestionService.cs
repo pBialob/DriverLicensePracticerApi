@@ -11,8 +11,8 @@ namespace DriverLicensePracticerApi.Services
 {
     public interface IQuestionService
     {
-        QuestionDto GetRandomQuestionDto();
-        PagedResult<QuestionDto> GetAllQuestionsDto(QuestionQuery query);
+        public QuestionDto GetRandomQuestionDto();
+        public PagedResult<QuestionDto> GetAllQuestionsDto(QuestionQuery query);
         public QuestionDto GetSpecifiedQuestionDto(string points, string level, string category);
         public SingleQuestionSolution ResolveSingleQuestion(Answer answer);
     }

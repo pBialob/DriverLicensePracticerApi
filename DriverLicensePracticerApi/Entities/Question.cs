@@ -9,7 +9,6 @@ namespace DriverLicensePracticerApi.Entities
         {
             this.QuestionCategories = new List<QuestionCategory>();
         }
-        [Key]
         public int Id { get; set; }
         public string QuestionName { get; set; }
         public string QuestionNumber { get; set; }
